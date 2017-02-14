@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+      <script src="jquery.min.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+    <style>
+      #div1 {
+          padding: 5px;
+          text-align: center;
+          background-color: #e5eecc;
+          border: solid 1px #c3c3c3;
+      }
+      #head{
+
+        text-align: center;
+      }
+</style>
+  </head>
+  <body>
+    <div class="container-fluid  color">
+  <nav class="navbar navbar-inverse navbar-fixed-top hidden-xs hidden-sm" >
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">github</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#" id="about">About Us</a></li>
+      </ul>
+    </div>
+  </nav>
+  <nav class="navbar navbar-inverse hidden-md hidden-lg" >
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">github</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#" id="about1">About Us</a></li>
+      </ul>
+    </div>
+  </nav>
+  </div>
+  <br><br><br><br><br>
+  <h1 id="head">GITHUB DETAILS</h1><br>
+    <div class="container" id="div1">
+
+      Enter the user details you want to fetch:<br><br>
+      <form class="form" id=formToSerialize>
+        <label for="username">Username: </label>
+        <input id="username" name="username" type=text/>
+      </form>
+      <div><br>
+        <button id="get-data">Get User</button>
+        <button id="reset">Reset</button>
+      </div>
+<br><br>
+      <div class="row">
+        <img class="col-md-2 col-sm-12 col-xs-12 img-circle" id="user-image" src="">
+        <p class="col-md-4 col-sm-12 col-xs-12" id="user-id"></p>
+        <p class="col-md-4 col-sm-12 col-xs-12" id="user-username"></p>
+        <p class="col-md-4 col-sm-12 col-xs-12" id="user-company"></p>
+        <p class="col-md-4 col-sm-12 col-xs-12" id="user-email"></p>
+        <p class="col-md-4 col-sm-12 col-xs-12" id="user-created"></p>
+        <p class="col-md-4 col-sm-12 col-xs-12" id="user-location"></p>
+        <p class="col-md-4 col-sm-12 col-xs-12" id="user-url"></p>
+      </div>
+    </div>
+    <script>
+    $('#reset').click(function() {
+        window.location.href="loadUserWithJq.html";
+    });
+      $(document).ajaxStart(function(){
+        $("#user-image").attr("src","progress.gif");
+      }).ajaxStop(function(){
+        console.log("Ajax Stopped.")
+      }).ajaxSuccess(function(){
+        console.log("Ajax Success")
+      }).ajaxComplete(function(){
+        console.log("Ajax Completed")
+      })
+
+      $("#get-data").on("click",function(){
+        var username = $("#username").val();
+        console.log(username);
+        $.ajax({
+          url:"https://api.github.com/users/"+username,
+          success: function(data){
+            console.log(data)
+            $("#user-image").attr("src",data.avatar_url);
+            $("#user-id").text("User id is : "+data.id);
+            $("#user-username").text("Username is : "+data.name);
+            $("#user-company").text("Company is : "+data.company);
+            $("#user-email").text("User email is : "+data.email);
+            $("#user-created").text("User created at : "+data.created_at);
+            $("#user-url").text("User url is : "+data.url);
+            $("#user-location").text("User location is : "+data.location);
+
+          },
+          error: function(){
+            $("#user-image").attr("src","no-user.jpg");
+            $("#user-id").text("User not found");
+            $("#user-username").text("Username is not found");
+            $("#user-company").text("Company name not found");
+            $("#user-email").text("User email not found");
+            $("#user-location").text("Location not found");
+            $("#user-created").text("User not Exist");
+            $("#user-url").text("Url not exist");
+
+          }
+        })
+      })
+    </script>
+  </body>
+</html>
